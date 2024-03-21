@@ -3,7 +3,7 @@
   <description>
     Code generator for Sketch
   </description>
-
+  
   <target name="all" depends="compile, mk_jar"/>
 
   <!-- global properties for this build file -->
@@ -16,6 +16,11 @@
 
   <!-- <property name="sketch.dir" location="${env.SKETCH_HOME}/.."/> -->
   <property name="sketch.jar" value="${env.SKETCH_JAR}"/>
+  <property name="gson.jar" value="gson-2.8.5.jar"/>
+  <property name="gson-extra.jar" value="gson-extras-2.8.5.jar"/>
+  <property name="jsr250.jar" value="jsr250-api-1.0.jar"/>
+  <property name="reflections.jar" value="reflections-0.10.2.jar"/>
+
 
   <!-- <property name="sketch.dir" location="${env.SKETCH_HOME}"/> -->
   <!-- <property name="sketch.classes" location="${sketch.dir}/target/classes"/> -->
@@ -29,14 +34,19 @@
   <!-- compile the java code in ${source.dir} into ${build.dir} -->
   <target name="compile" depends="init" description="compile java sources">
 
-    <javac srcdir="${source.dir}" destdir="${build.dir}" classpath="${sketch.jar}"/>
+    <javac srcdir="${source.dir}" destdir="${build.dir}" classpath="${sketch.jar}:${gson.jar}:${gson-extra.jar}:${jsr250.jar}:${reflections.jar}"/>
 
     <!-- <javac srcdir="${source.dir}" destdir="${build.dir}" classpath="${sketch.classes}"/> -->
   </target>
 
   <!-- make a jar file that includes all the classes files in ${build.dir} -->
   <target name="mk_jar" depends="compile" description="make jar file">
-    <jar basedir="${build.dir}" destfile="${codegen.jar}"/>
+    <jar basedir="${build.dir}" destfile="${codegen.jar}">
+      <zipgroupfileset dir="." includes="gson-2.8.5.jar" />
+      <zipgroupfileset dir="." includes="gson-extras-2.8.5.jar" />
+      <zipgroupfileset dir="." includes="jsr250-api-1.0.jar" />
+      <zipgroupfileset dir="." includes="reflections-0.10.2.jar" />
+    </jar>
   </target>
 
   <!-- delete the build directory and jar file -->
